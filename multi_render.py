@@ -13,6 +13,7 @@ import osr
 BLACK = (  0,   0,   0)
 GRAY  = (100, 100, 100)
 WHITE = (255, 255, 255)
+RED = (255,0,0)
 
 def pick_color():
     return tuple(random.randrange(64, 256) for i in range(3))
@@ -145,17 +146,70 @@ while pygame.mixer.music.get_busy():
             circles.append(o)
         while trail and (pos - trail[0].t) > tail:
             trail.popleft()
+        prev=None
+        #pygame.draw.line(screen,RED,(784.6370556, 238.35857023999998) ,  (792.115047, 238.35857023999998))
+        #pygame.draw.line(screen,WHITE,(792.115047, 238.35857023999998),   (799.5928832999999, 230.88068741))
+        #pygame.draw.line(screen,RED,(799.5928832999999, 230.88068741) ,  (807.0707196, 230.88068741))
+
         if len(trail) > 1:
             points = [scale(p.x, p.y) for p in trail]
-            lines.append((points, color))
+            #tempList = []
+            #prevx = points[0][0]
+            #prevy= points[0][1]
+            #tempList.append((prevx,prevy))
+            #mode = 1
+            #input()
+            #print('---------------')
+            for pt in points:
+                
+                if(prev!=None and prev!=pt ):
+                    #print(prev,' ',pt)
+                    if(prev[0]!=pt[0] and prev[1]!=pt[1]):
+                        pygame.draw.line(screen,color,prev,pt)
+                        #print('WHITE')
+                    else:
+                        pygame.draw.line(screen,RED,prev,pt)
+                        #print('RED')
+                '''
+                print(tempList)
+                if(prevx!=pt[0] and prevy!=pt[1]):# and len(tempList)!=0):
+                    if(mode!=0):
+                        pygame.draw.lines(screen, RED, False, tempList)
+                        temptail = tempList.pop()
+                        
+                        tempList.clear()
+                        tempList.append(temptail)
+                        
+                        tempList.append(pt)
+                        mode = 0
+                    else:
+                        tempList.append(pt)
+                else:
+                    if(mode!=1):
+                        pygame.draw.lines(screen, WHITE, False, tempList)
+                        temptail = tempList.pop()
+                        
+                        tempList.clear()
+                        tempList.append(temptail)
+                        
+                        tempList.append(pt)
+                        mode = 1
+                    else:
+                        tempList.append(pt)
+                '''        
+                prev = pt
+                    
+            #lines.append((points, color))
         y = i * KEYSIZE
         for j, o in enumerate(osr.keys(state.z)):
             x = WIDTH - KEYSIZE * 5 + j * KEYSIZE
             rects.append(((x, y, KEYSIZE, KEYSIZE), color if o else BLACK))
-
+    #print(len(lines))
+    '''
     if tail:
         for points, color in lines:
             pygame.draw.lines(screen, color, False, points)
+    '''
 
     if radius:
         for (x, y), color in circles:
